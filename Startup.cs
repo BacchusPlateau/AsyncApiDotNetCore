@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AsyncAPIDotNetCore.Contexts;
+using AsyncAPIDotNetCore.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,9 +31,14 @@ namespace AsyncAPIDotNetCore
         {
             services.AddControllers();
 
+            //dbcontext is created with a SCOPED context
             var connectionString = Configuration["ConnectionStrings:BooksDBConnectionString"];
             services.AddDbContext<BookContext>(o => o.UseSqlServer(connectionString));
 
+            //we must match lifetime with the context
+            services.AddScoped<IBooksRepository, BooksRepository>();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

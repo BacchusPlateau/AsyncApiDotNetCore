@@ -14,7 +14,11 @@ namespace AsyncAPIDotNetCore.Contexts
 
         public BookContext(DbContextOptions<BookContext> options) : base(options)
         {
-
+            //run via package manager console
+            //PM> Add-Migration InitialMigration
+            //
+            //then on command line in the target project containing the migration
+            //dotnet ef database update
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
