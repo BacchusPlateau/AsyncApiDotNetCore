@@ -10,5 +10,7 @@ namespace AsyncAPIDotNetCore.Services
         IEnumerable<Entities.Book> GetBooks();
         Task<IEnumerable<Entities.Book>> GetBooksAync();
         Task<Entities.Book> GetBookAsync(Guid id);
+        void AddBook(Entities.Book bookToAdd);
+        Task<bool> SaveChangesAsync();
     }
 }

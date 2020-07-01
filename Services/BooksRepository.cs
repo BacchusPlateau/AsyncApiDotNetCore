@@ -17,6 +17,13 @@ namespace AsyncAPIDotNetCore.Services
             _bookContext = bookContext ?? throw new ArgumentNullException(nameof(bookContext));
         }
 
+        public void AddBook(Book bookToAdd)
+        {
+            if (bookToAdd == null)
+                throw new ArgumentNullException(nameof(bookToAdd));
+
+            _bookContext.Add(bookToAdd);
+        }
 
         public async Task<Book> GetBookAsync(Guid id)
         {
@@ -58,6 +65,11 @@ namespace AsyncAPIDotNetCore.Services
             return _bookContext.Books
                 .Include(b => b.Author)
                 .ToList();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _bookContext.SaveChangesAsync() > 0);
         }
     }
 }

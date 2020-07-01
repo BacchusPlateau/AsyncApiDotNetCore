@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AsyncAPIDotNetCore.Filters;
+using AsyncAPIDotNetCore.Models;
 using AsyncAPIDotNetCore.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AsyncAPIDotNetCore.Controllers
@@ -13,10 +15,12 @@ namespace AsyncAPIDotNetCore.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBooksRepository _booksRepository;
+        private readonly IMapper _mapper;
 
-        public BooksController(IBooksRepository booksRepository)
+        public BooksController(IBooksRepository booksRepository, IMapper mapper)
         {
             _booksRepository = booksRepository ?? throw new ArgumentNullException(nameof(booksRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -28,7 +32,7 @@ namespace AsyncAPIDotNetCore.Controllers
         }
 
         [HttpGet]
-        [Route("{id}", Name = "GetBook")]
+        [Route("{id}", Name = "GetBook")]    //example:  https://localhost:44335/api/books/493c3228-3444-4a49-9cc0-e8532edc59b2
         [BookResultFilter]
         public async Task<IActionResult> GetBook(Guid id)
         {
@@ -37,6 +41,20 @@ namespace AsyncAPIDotNetCore.Controllers
                 return NotFound();
 
             return Ok(book);
+        }
+
+        [HttpPost]
+        [BookResultFilter]
+        public async Task<IActionResult> CreateBook(BookForCreation bookForCreation)
+        {
+            var book = _mapper.Map<Entities.Book>(bookForCreation);
+            _booksRepository.AddBook(book);
+
+            await _booksRepository.SaveChangesAsync();
+            await _booksRepository.GetBookAsync(book.Id);  //loads author details into the context
+
+
+            return CreatedAtRoute("GetBook", new { id = book.Id }, book);
         }
     }
 }
