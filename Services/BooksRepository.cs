@@ -32,7 +32,7 @@ namespace AsyncAPIDotNetCore.Services
                 .FirstOrDefaultAsync(b => b.Id == id);
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAync()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
             await _bookContext.Database.ExecuteSqlRawAsync("WAITFOR DELAY '00:00:02';");  //simulate network traffic
             return await _bookContext.Books
@@ -70,6 +70,14 @@ namespace AsyncAPIDotNetCore.Services
         public async Task<bool> SaveChangesAsync()
         {
             return (await _bookContext.SaveChangesAsync() > 0);
+        }
+
+        public async Task<IEnumerable<Book>> GetBooksAsync(IEnumerable<Guid> bookIds)
+        {
+            return await _bookContext.Books
+                .Where(b => bookIds.Contains(b.Id))
+                .Include(b => b.Author)
+                .ToListAsync();
         }
     }
 }

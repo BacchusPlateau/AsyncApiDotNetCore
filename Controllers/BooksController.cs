@@ -27,7 +27,7 @@ namespace AsyncAPIDotNetCore.Controllers
         [BooksResultFilter]
         public async Task<IActionResult> GetBooks()
         {
-            var books = await _booksRepository.GetBooksAync();
+            var books = await _booksRepository.GetBooksAsync();
             return Ok(books);
         }
 
