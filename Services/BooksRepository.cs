@@ -44,7 +44,12 @@ namespace AsyncAPIDotNetCore.Services
 
         public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            await _bookContext.Database.ExecuteSqlRawAsync("WAITFOR DELAY '00:00:02';");  //simulate network traffic
+            //uncomment to test
+            //var pageCalculator = new Books.Legacy.ComplicatedPageCalculator();
+            //var amountOfPages = pageCalculator.CalculateBookPages();
+
+            //await _bookContext.Database.ExecuteSqlRawAsync("WAITFOR DELAY '00:00:02';");  //simulate network traffic
+
             return await _bookContext.Books
                 .Include(b => b.Author)
                 .ToListAsync();
@@ -77,7 +82,8 @@ namespace AsyncAPIDotNetCore.Services
 
         public IEnumerable<Book> GetBooks()
         {
-            _bookContext.Database.ExecuteSqlRaw("WAITFOR DELAY '00:00:02';"); //simulate network traffic
+            //_bookContext.Database.ExecuteSqlRaw("WAITFOR DELAY '00:00:02';"); //simulate network traffic
+
             return _bookContext.Books
                 .Include(b => b.Author)
                 .ToList();

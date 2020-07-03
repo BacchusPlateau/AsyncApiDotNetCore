@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <Compile Remove="BookCovers.API\**" />
+    <Compile Remove="Books.Legacy\**" />
     <Content Remove="BookCovers.API\**" />
+    <Content Remove="Books.Legacy\**" />
     <EmbeddedResource Remove="BookCovers.API\**" />
+    <EmbeddedResource Remove="Books.Legacy\**" />
     <None Remove="BookCovers.API\**" />
+    <None Remove="Books.Legacy\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +22,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Books.Legacy\Books.Legacy.csproj" />
   </ItemGroup>
 
 
