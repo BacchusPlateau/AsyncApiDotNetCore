@@ -1,21 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AsyncAPIDotNetCore.Contexts;
-using AsyncAPIDotNetCore.Services;
-using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace AsyncAPIDotNetCore
+namespace BookCovers.API
 {
     public class Startup
     {
@@ -30,17 +19,6 @@ namespace AsyncAPIDotNetCore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            //dbcontext is created with a SCOPED context
-            var connectionString = Configuration["ConnectionStrings:BooksDBConnectionString"];
-            services.AddDbContext<BookContext>(o => o.UseSqlServer(connectionString));
-
-            services.AddHttpClient();
-
-            //we must match lifetime with the context
-            services.AddScoped<IBooksRepository, BooksRepository>();
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

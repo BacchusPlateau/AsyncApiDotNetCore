@@ -33,14 +33,20 @@ namespace AsyncAPIDotNetCore.Controllers
 
         [HttpGet]
         [Route("{id}", Name = "GetBook")]    //example:  https://localhost:44335/api/books/493c3228-3444-4a49-9cc0-e8532edc59b2
-        [BookResultFilter]
+        [BookWithCoversResultFilter]
         public async Task<IActionResult> GetBook(Guid id)
         {
             var book = await _booksRepository.GetBookAsync(id);
-            if (book == null)
+            if (book == null) 
+            { 
                 return NotFound();
+            }
 
-            return Ok(book);
+            var covers = await _booksRepository.GetBookCoversAsync(id);
+
+            //dynamically create a tuple return type
+
+            return Ok((book, covers));
         }
 
         [HttpPost]
@@ -55,6 +61,15 @@ namespace AsyncAPIDotNetCore.Controllers
 
 
             return CreatedAtRoute("GetBook", new { id = book.Id }, book);
+        }
+
+        [HttpGet]
+        [Route("cover/{id}")]
+        public async Task<IActionResult> GetBookImage(Guid id)
+        {
+            var bookCover = await _booksRepository.GetBookCoverAsync("dummyCover");
+
+            return File(bookCover.Content, "image/jpeg");
         }
     }
 }
