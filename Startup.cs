@@ -35,6 +35,7 @@ namespace AsyncAPIDotNetCore
             var connectionString = Configuration["ConnectionStrings:BooksDBConnectionString"];
             services.AddDbContext<BookContext>(o => o.UseSqlServer(connectionString));
 
+            services.AddLogging(builder => builder.AddConsole());
             services.AddHttpClient();
 
             //we must match lifetime with the context
